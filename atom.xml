@@ -59,9 +59,11 @@
     <link href="http://yoursite.com/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/"/>
     <id>http://yoursite.com/2016/06/14/TableViewCell的收缩展开与动态高度/</id>
     <published>2016-06-14T10:03:35.000Z</published>
-    <updated>2016-06-14T11:58:03.000Z</updated>
+    <updated>2016-06-16T09:06:01.000Z</updated>
     
-    <content type="html">&lt;blockquote&gt;
+    <content type="html">&lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;blockquote&gt;
 &lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&quot;Cell收缩与展开&quot;&gt;&lt;a href=&quot;#Cell收缩与展开&quot; class=&quot;headerlink&quot; title=&quot;Cell收缩与展开&quot;&gt;&lt;/a&gt;Cell收缩与展开&lt;/h3&gt;&lt;p&gt;这是在实际项目中遇到一个需求。展示一个表格，每一行为一个项目的汇总行，点击表格每一行时展开一系列细节小行，在此点击收起该行，仅展示汇总行。如下图所示。&lt;/p&gt;
@@ -136,8 +138,7 @@
     
     <summary type="html">
     
-      &lt;blockquote&gt;
-&lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableVie
+      &lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
     
     </summary>
     
