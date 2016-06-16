@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-06-14T11:58:43.000Z</updated>
+  <updated>2016-06-16T09:29:39.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,13 @@
     <link href="http://yoursite.com/2016/06/14/tableView%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     <id>http://yoursite.com/2016/06/14/tableView性能优化/</id>
     <published>2016-06-14T11:56:25.000Z</published>
-    <updated>2016-06-14T11:58:43.000Z</updated>
+    <updated>2016-06-16T09:29:39.000Z</updated>
     
-    <content type="html">&lt;p&gt;这是笔者在工作项目中遇到的一个需求。本篇文章将延续上一篇&lt;a href=&quot;http://0.0.0.0:4000/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;《TableViewCell的收缩展开与动态高度》&lt;/a&gt;继续探讨有关TableView性能方面的问题。&lt;a href=&quot;http://0.0.0.0:4000/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;上一篇&lt;/a&gt;中主要涉及到了&lt;code&gt;-beginUpdate&lt;/code&gt;触发&lt;code&gt;-tableView:heightForRowAtIndexPath:&lt;/code&gt;回调去改变Cell高度，和通过改变Cell中内容的&lt;strong&gt;约束优先级&lt;/strong&gt;去解决约束冲突问题，以及StackView在TableViewCell里的运用。&lt;/p&gt;
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;这是笔者在工作项目中遇到的一个需求。本篇文章将延续上一篇&lt;a href=&quot;http://partyspy.cn/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;《TableViewCell的收缩展开与动态高度》&lt;/a&gt;继续探讨有关TableView性能方面的问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;&lt;a href=&quot;http://partyspy.cn/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;上一篇&lt;/a&gt;中主要涉及到了&lt;code&gt;-beginUpdate&lt;/code&gt;触发&lt;code&gt;-tableView:heightForRowAtIndexPath:&lt;/code&gt;回调去改变Cell高度，和通过改变Cell中内容的&lt;strong&gt;约束优先级&lt;/strong&gt;去解决约束冲突问题，以及StackView在TableViewCell里的运用。&lt;/p&gt;
 &lt;h3 id=&quot;TableView性能&quot;&gt;&lt;a href=&quot;#TableView性能&quot; class=&quot;headerlink&quot; title=&quot;TableView性能&quot;&gt;&lt;/a&gt;TableView性能&lt;/h3&gt;&lt;p&gt;table view性能瓶颈主要集中在&lt;code&gt;-tableView:cellForRowAtIndexPath&lt;/code&gt; 和&lt;code&gt;-tableView:heightForRowAtIndexPath:&lt;/code&gt;这两个高频调用的回调函数。&lt;a href=&quot;http://www.jianshu.com/p/202b5cfcc6f4&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;上一篇&lt;/a&gt;文章中将Cell的stackView内容插入和高度计算都移到了&lt;code&gt;-tableView:didSelectRowAtIndexPath:&lt;/code&gt;里，且加了判断标识使得每个cell只计算一次。这也涉及到了性能优化的实践。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;不要在&lt;code&gt;-tableView:heightForRowAtIndexPath:&lt;/code&gt;里使用tableView的 &lt;code&gt;-cellForRowAtIndexPath:&lt;/code&gt;方法获取cell.&lt;/p&gt;
@@ -45,7 +49,9 @@
     
     <summary type="html">
     
-      &lt;p&gt;这是笔者在工作项目中遇到的一个需求。本篇文章将延续上一篇&lt;a href=&quot;http://0.0.0.0:4000/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E
+      &lt;blockquote&gt;
+&lt;p&gt;这是笔者在工作项目中遇到的一个需求。本篇文章将延续上一篇&lt;a href=&quot;http://partyspy.cn/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/&quot;&gt;《TableViewCell的收缩展开与动态高度》&lt;/a&gt;继续探讨有关TableView性能方面的问题。&lt;/p&gt;
+&lt;/blockquote&gt;
     
     </summary>
     
@@ -59,13 +65,12 @@
     <link href="http://yoursite.com/2016/06/14/TableViewCell%E7%9A%84%E6%94%B6%E7%BC%A9%E5%B1%95%E5%BC%80%E4%B8%8E%E5%8A%A8%E6%80%81%E9%AB%98%E5%BA%A6/"/>
     <id>http://yoursite.com/2016/06/14/TableViewCell的收缩展开与动态高度/</id>
     <published>2016-06-14T10:03:35.000Z</published>
-    <updated>2016-06-16T09:06:01.000Z</updated>
+    <updated>2016-06-16T09:28:51.000Z</updated>
     
-    <content type="html">&lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;blockquote&gt;
+    <content type="html">&lt;blockquote&gt;
 &lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
 &lt;h3 id=&quot;Cell收缩与展开&quot;&gt;&lt;a href=&quot;#Cell收缩与展开&quot; class=&quot;headerlink&quot; title=&quot;Cell收缩与展开&quot;&gt;&lt;/a&gt;Cell收缩与展开&lt;/h3&gt;&lt;p&gt;这是在实际项目中遇到一个需求。展示一个表格，每一行为一个项目的汇总行，点击表格每一行时展开一系列细节小行，在此点击收起该行，仅展示汇总行。如下图所示。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/2252015-78fd57325df4b9e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Paste_Image.png&quot;&gt;&lt;br&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/2252015-e0f764e66b54fbe1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Paste_Image.png&quot;&gt;&lt;br&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/2252015-325f154eac08d5c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Paste_Image.png&quot;&gt;&lt;/p&gt;
 &lt;blockquote&gt;
@@ -138,7 +143,9 @@
     
     <summary type="html">
     
-      &lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
+      &lt;blockquote&gt;
+&lt;p&gt;关于TableViewCell的收缩展开与动态高度的方法网上有很多，但本文主要运用AutoLayout和更改&lt;strong&gt;Constraint priority&lt;/strong&gt;的方式来实现，另外包括了StackView动态插入在TableViewCell里的运用。&lt;/p&gt;
+&lt;/blockquote&gt;
     
     </summary>
     
