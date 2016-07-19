@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-07-04T09:50:50.000Z</updated>
+  <updated>2016-07-19T16:26:54.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>利用AFNetworking最小代码实现自签CA证书的HTTPS</title>
+    <link href="http://yoursite.com/2016/07/20/%E5%88%A9%E7%94%A8AFNetworking%E6%9C%80%E5%B0%8F%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BECA%E8%AF%81%E4%B9%A6%E7%9A%84HTTPS/"/>
+    <id>http://yoursite.com/2016/07/20/利用AFNetworking最小代码实现自签CA证书的HTTPS/</id>
+    <published>2016-07-19T16:16:58.000Z</published>
+    <updated>2016-07-19T16:26:54.000Z</updated>
+    
+    <content type="html">&lt;p&gt;这里以向&lt;a href=&quot;https://api.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://api.github.com&lt;/a&gt;发送请求为例。&lt;/p&gt;
+&lt;p&gt;把自定义的CA证书放入工程：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/2252015-176624fac7027005.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Paste_Image.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这里以HTTP代理工具&lt;a href=&quot;https://www.charlesproxy.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Charles&lt;/a&gt;作为中间人来演示。关于该工具的使用方法, 本文暂不论述. 这里仅用它来展示自签名证书的请求效果.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://api.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://api.github.com&lt;/a&gt;网址的证书实际上是正规CA&lt;code&gt;DigiCert&lt;/code&gt;签发的, 这里把Charles的CA根证书导入系统并设为信任后, 把Charles设为该网址的SSL Proxy (相当于&lt;strong&gt;“中间人”&lt;/strong&gt;), 这样通过代理访问服务器返回将是由Charles伪CA签发的证书.&lt;br&gt;本例假设 &lt;a href=&quot;https://api.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://api.github.com&lt;/a&gt;的服务器证书是自签的.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;全部代码如下&quot;&gt;&lt;a href=&quot;#全部代码如下&quot; class=&quot;headerlink&quot; title=&quot;全部代码如下:&quot;&gt;&lt;/a&gt;全部代码如下:&lt;/h3&gt;&lt;figure class=&quot;highlight objectivec&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;comment&quot;&gt;//你请求的网络服务返回的是JSON数据&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    manager.responseSerializer = [AFJSONResponseSerializer serializer];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;comment&quot;&gt;//自定义security policy, 先前确保你的自定义CA证书已放入工程Bundle&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;built_in&quot;&gt;NSSet&lt;/span&gt; &amp;lt;&lt;span class=&quot;built_in&quot;&gt;NSData&lt;/span&gt; *&amp;gt; *cerSet = [AFSecurityPolicy certificatesInBundle:[&lt;span class=&quot;built_in&quot;&gt;NSBundle&lt;/span&gt; mainBundle]];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:cerSet];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    policy.allowInvalidCertificates = &lt;span class=&quot;literal&quot;&gt;YES&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    manager.securityPolicy = policy;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;comment&quot;&gt;//实际应用中把https://api.github.com换为你自己要访问的网址&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    [manager GET:&lt;span class=&quot;string&quot;&gt;@&quot;https://api.github.com&quot;&lt;/span&gt; parameters:&lt;span class=&quot;literal&quot;&gt;nil&lt;/span&gt; progress:&lt;span class=&quot;literal&quot;&gt;nil&lt;/span&gt; success:^(&lt;span class=&quot;built_in&quot;&gt;NSURLSessionDataTask&lt;/span&gt; * _Nonnull task, &lt;span class=&quot;keyword&quot;&gt;id&lt;/span&gt;  _Nullable responseObject) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;built_in&quot;&gt;NSLog&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;@&quot;responseObject:%@&quot;&lt;/span&gt;, responseObject);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125; failure:^(&lt;span class=&quot;built_in&quot;&gt;NSURLSessionDataTask&lt;/span&gt; * _Nullable task, &lt;span class=&quot;built_in&quot;&gt;NSError&lt;/span&gt; * _Nonnull error) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;built_in&quot;&gt;NSLog&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;@&quot;error.localDesc:%@&quot;&lt;/span&gt;, error.localizedDescription);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;built_in&quot;&gt;NSLog&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;@&quot;%@&quot;&lt;/span&gt;, error);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;打印返回的数据将如下一般:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/2252015-b7ea6453c0ab743c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Paste_Image.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;如果服务端使用的是正规CA签发的证书, 那么以下几行就可去掉:&lt;/p&gt;
+&lt;figure class=&quot;highlight objectivec&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;NSSet&lt;/span&gt; &amp;lt;&lt;span class=&quot;built_in&quot;&gt;NSData&lt;/span&gt; *&amp;gt; *cerSet = [AFSecurityPolicy certificatesInBundle:[&lt;span class=&quot;built_in&quot;&gt;NSBundle&lt;/span&gt; mainBundle]]; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:cerSet]; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;policy.allowInvalidCertificates = &lt;span class=&quot;literal&quot;&gt;YES&lt;/span&gt;; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;manager.securityPolicy = policy;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;采用默认的&lt;code&gt;defaultPolicy&lt;/code&gt;就可以了. AFN默认的securityPolicy就是它, 不必另写代码. AFSecurityPolicy类中会调用苹果security.framework的机制去自行验证本次请求服务端放回的证书是否是经过正规签名.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这里以向&lt;a href=&quot;https://api.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://api.github.com&lt;/a&gt;发送请求为例。&lt;/p&gt;
+&lt;p&gt;把自定义的CA证书放入工程：&lt;/p&gt;
+&lt;p&gt;&lt;img s
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Objective-C Runtime(一) 初探</title>
